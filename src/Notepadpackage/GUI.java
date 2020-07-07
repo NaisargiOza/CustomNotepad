@@ -1,8 +1,11 @@
 package Notepadpackage;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop.Action;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineBreakMeasurer;
 import java.text.AttributedCharacterIterator;
@@ -14,16 +17,21 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
+import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.DefaultEditorKit.CopyAction;
+import javax.swing.text.DefaultEditorKit.PasteAction;
 import javax.swing.undo.UndoManager;
 
-public class GUI implements ActionListener{
+public class GUI implements ActionListener,KeyListener{
   
 	JFrame window;
 	JTextArea textArea;
@@ -36,6 +44,7 @@ public class GUI implements ActionListener{
 	JMenuItem iWrap,iFontArial,iFontCSMS,iFontTNR,iFontSize8,iFontSize12,iFontSize16,iFontSize20,iFontSize24;
 	JMenuItem iColor1,iColor2,iColor3;
 	JMenuItem iUndo,iRedo;
+	
 	
 	Function_File f=new Function_File(this);
 	Function_Format format=new Function_Format(this);
@@ -60,6 +69,7 @@ public class GUI implements ActionListener{
         createEditMenu();
         createFormatMenu();
         createColorMenu();
+        
        
         format.selectedFont="Arial";
         format.createFont(16);
@@ -131,7 +141,7 @@ public class GUI implements ActionListener{
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         window.add(scrollPane,BorderLayout.CENTER);
     	window.add(label,BorderLayout.SOUTH);
-       
+        textArea.addKeyListener(this);
     	window.setVisible(true);
     }
     
@@ -270,5 +280,54 @@ public class GUI implements ActionListener{
 		  case "Black": color.changeColor(str);break;
 		  case "Blue": color.changeColor(str);break;
 		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent ev) {
+		if(((int)ev.getKeyChar())==19) {
+			f.save();
+			System.out.println("Ctrl+s");
+		}
+		if(((int)ev.getKeyChar())==15) {
+			f.Open();
+			System.out.println("Ctrl+o");
+		}
+		if(((int)ev.getKeyChar())==14) {
+			f.New();
+			System.out.println("Ctrl+n");
+		}
+		if(((int)ev.getKeyChar())==25) {
+			edit.redo();
+			System.out.println("Ctrl+y");
+		}
+		if(((int)ev.getKeyChar())==26) {
+			edit.undo();
+			System.out.println("Ctrl+z");
+		}
+		if(((int)ev.getKeyChar())==3) {
+			textArea.copy();
+			System.out.println("Ctrl+c");
+		}
+		if(((int)ev.getKeyChar())==22) {
+			textArea.paste();
+			System.out.println("Ctrl+v");
+		}
+		if(((int)ev.getKeyChar())==24) {
+			textArea.cut();
+			System.out.println("Ctrl+x");
+		}
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

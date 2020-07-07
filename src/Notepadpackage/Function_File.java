@@ -32,13 +32,14 @@ public class Function_File {
 		   gui.window.setTitle(fileName);
 	   }
 	   try {
+		   if(fd.getFile()!=null) {
 		   gui.textArea.setText(" ");
 		   BufferedReader br=new BufferedReader(new FileReader(fileAddress + fileName));
 		   String line="";
 		   while((line=br.readLine())!=null) {
 			   gui.textArea.append(line + "\n");
 		   }
-		   br.close();
+		   br.close(); }
 	   }catch(Exception e) {
 		   JOptionPane.showMessageDialog(null,"No file is selected!","Error",JOptionPane.ERROR_MESSAGE);
 	   }

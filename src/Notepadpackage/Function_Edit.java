@@ -9,10 +9,14 @@ public class Function_Edit {
 	}
 	
 	public void undo() {
+		if(gui.um.canUndo() ) {
 		gui.um.undo();
+		}
 	}
 	
 	public void redo() {
+		if(gui.um.canRedo()) {
 		gui.um.redo();
+		}
 	}
 }
