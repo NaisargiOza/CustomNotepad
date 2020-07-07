@@ -15,6 +15,7 @@ import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -168,6 +169,7 @@ public class GUI implements ActionListener,KeyListener{
     			pos+=pattern.length();
     			c++;
     		}
+    		label.setText("Count: "+c);
     	}catch(Exception e) {
     		e.printStackTrace();
     	}
@@ -188,9 +190,12 @@ public class GUI implements ActionListener,KeyListener{
     }
     
     void createPanel() {
-       textField=new JTextField();
+       textField=new JTextField(12);
        button=new JButton("Enter");
-       textField.setSize( new Dimension( 50, 10 ) );
+       //textField.setSize( new Dimension( 50, 10 ) );
+       //textField.setColumns(10);
+       textField.setMaximumSize( textField.getPreferredSize() );
+       menuBar.add(Box.createHorizontalGlue());
        menuBar.add(textField);
        menuBar.add(button);
        button.addActionListener(this);
