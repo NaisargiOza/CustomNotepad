@@ -1,7 +1,10 @@
 package Notepadpackage;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Desktop.Action;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -12,6 +15,7 @@ import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -20,6 +24,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
@@ -29,6 +34,8 @@ import javax.swing.event.UndoableEditListener;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.DefaultEditorKit.CopyAction;
 import javax.swing.text.DefaultEditorKit.PasteAction;
+import javax.swing.text.Document;
+import javax.swing.text.Highlighter;
 import javax.swing.undo.UndoManager;
 
 public class GUI implements ActionListener,KeyListener{
@@ -44,7 +51,10 @@ public class GUI implements ActionListener,KeyListener{
 	JMenuItem iWrap,iFontArial,iFontCSMS,iFontTNR,iFontSize8,iFontSize12,iFontSize16,iFontSize20,iFontSize24;
 	JMenuItem iColor1,iColor2,iColor3;
 	JMenuItem iUndo,iRedo;
-	
+	JTextField textField;
+	JButton button;
+	JLabel label;
+	Highlighter.HighlightPainter myHighlighterPainter;
 	
 	Function_File f=new Function_File(this);
 	Function_Format format=new Function_Format(this);
@@ -65,11 +75,11 @@ public class GUI implements ActionListener,KeyListener{
     	createWindow();
         createTextArea();
         createMenuBar();
+        createPanel();
         createFileMenu();
         createEditMenu();
         createFormatMenu();
         createColorMenu();
-        
        
         format.selectedFont="Arial";
         format.createFont(16);
@@ -86,7 +96,7 @@ public class GUI implements ActionListener,KeyListener{
     
     public void createTextArea() {
     	textArea=new JTextArea();
-    	JLabel label=new JLabel();
+        label=new JLabel();
     	
     	textArea.getDocument().addUndoableEditListener(
     			new UndoableEditListener() {
@@ -107,6 +117,7 @@ public class GUI implements ActionListener,KeyListener{
 
     		  public void warn() {  
     			  //String words[]=textArea.getText().split(" ");
+    			  removeHighlights();
     		      String k[]=textArea.getText().split("\n");
     		      int count=0;
     		      for(String s:k)
@@ -143,6 +154,23 @@ public class GUI implements ActionListener,KeyListener{
     	window.add(label,BorderLayout.SOUTH);
         textArea.addKeyListener(this);
     	window.setVisible(true);
+    	myHighlighterPainter=new MyHighlighterPainter(Color.red);
+    }
+    
+    public void highlight(String pattern) {
+    	try {
+    		Highlighter hi=textArea.getHighlighter();
+    		Document doc=textArea.getDocument();
+    		String text=doc.getText(0,doc.getLength());
+    		int pos=0,c=0;
+    		while((pos=text.toUpperCase().indexOf(pattern.toUpperCase(),pos))>=0) {
+    			hi.addHighlight(pos,pos+pattern.length(),myHighlighterPainter);
+    			pos+=pattern.length();
+    			c++;
+    		}
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}
     }
     
     public void createMenuBar() {
@@ -157,6 +185,16 @@ public class GUI implements ActionListener,KeyListener{
         menuBar.add(menuFormat);
         menuColor=new JMenu("Color");
         menuBar.add(menuColor);
+    }
+    
+    void createPanel() {
+       textField=new JTextField();
+       button=new JButton("Enter");
+       textField.setSize( new Dimension( 50, 10 ) );
+       menuBar.add(textField);
+       menuBar.add(button);
+       button.addActionListener(this);
+       button.setActionCommand("Search");
     }
     
     void createFileMenu() {
@@ -279,9 +317,20 @@ public class GUI implements ActionListener,KeyListener{
 		  case "White": color.changeColor(str);break;
 		  case "Black": color.changeColor(str);break;
 		  case "Blue": color.changeColor(str);break;
+		  case "Search": highlight(textField.getText());break;
 		}
 	}
-
+    
+	public void removeHighlights() {
+		Highlighter hi=textArea.getHighlighter(); 
+		Highlighter.Highlight[] hilights=hi.getHighlights();
+		for(int i=0;i<hilights.length;i++) {
+			if(hilights[i].getPainter() instanceof MyHighlighterPainter) {
+				hi.removeHighlight(hilights[i]);
+			}
+		}
+	}
+	
 	@Override
 	public void keyPressed(KeyEvent ev) {
 		if(((int)ev.getKeyChar())==19) {
