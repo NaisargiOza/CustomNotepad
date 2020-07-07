@@ -1,9 +1,13 @@
 package Notepadpackage;
 
 import java.awt.BorderLayout;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.font.FontRenderContext;
+import java.awt.font.LineBreakMeasurer;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
+
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -92,8 +96,35 @@ public class GUI implements ActionListener{
     		  }
 
     		  public void warn() {  
-    		      String words[]=textArea.getText().split(" ");
-    		      label.setText("Lines: "+textArea.getLineCount()+" Words: "+words.length);
+    			  //String words[]=textArea.getText().split(" ");
+    		      String k[]=textArea.getText().split("\n");
+    		      int count=0;
+    		      for(String s:k)
+    		      { count+=s.split(" ").length; }
+    		      if(wordWrapOn==false) {
+    		      label.setText("Lines: "+k.length+" Words: "+count);
+    		      //label.setText("Lines: "+k.length+" Words: "+words.length);
+    		      }
+    		      else
+    			  { try {
+    		    	AttributedString text = new AttributedString(textArea.getText());
+    			    FontRenderContext frc = textArea.getFontMetrics(textArea.getFont())
+    			        .getFontRenderContext();
+    			    AttributedCharacterIterator charIt = text.getIterator();
+    			    LineBreakMeasurer lineMeasurer = new LineBreakMeasurer(charIt, frc);
+    			    float formatWidth = (float) textArea.getSize().width;
+    			    lineMeasurer.setPosition(charIt.getBeginIndex());
+                    int noLines = 0;
+    			    while (lineMeasurer.getPosition() < charIt.getEndIndex()) {
+    			      lineMeasurer.nextLayout(formatWidth);
+    			      noLines++;
+    			    }
+    			    noLines+=k.length;
+    			    noLines-=1;
+    			    label.setText("Lines: "+noLines+" Words: "+count);}catch(Exception e) {
+    			    	e.printStackTrace();
+    			    }
+    			  }
     		  }
     	});
     	scrollPane=new JScrollPane(textArea,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -169,7 +200,7 @@ public class GUI implements ActionListener{
     	iFontCSMS.addActionListener(this);
     	iFontCSMS.setActionCommand("Comic Sans MS");
     	menuFont.add(iFontCSMS);
-    	iFontTNR=new JMenuItem("Times New Roman");
+    	iFontTNR=new JMenuItem("Monospaced");
     	iFontTNR.addActionListener(this);
     	iFontTNR.setActionCommand("Times New Roman");
     	menuFont.add(iFontTNR);

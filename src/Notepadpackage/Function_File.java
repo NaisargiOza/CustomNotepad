@@ -32,6 +32,7 @@ public class Function_File {
 		   gui.window.setTitle(fileName);
 	   }
 	   try {
+		   gui.textArea.setText(" ");
 		   BufferedReader br=new BufferedReader(new FileReader(fileAddress + fileName));
 		   String line="";
 		   while((line=br.readLine())!=null) {

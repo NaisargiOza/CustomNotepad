@@ -1,7 +1,12 @@
 package Notepadpackage;
 
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.font.LineBreakMeasurer;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
 
+import javax.swing.JLabel;
 public class Function_Format{
      
 	GUI gui;
