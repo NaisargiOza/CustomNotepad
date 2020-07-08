@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Desktop.Action;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
@@ -178,7 +181,6 @@ public class GUI implements ActionListener,KeyListener{
     public void createMenuBar() {
     	menuBar=new JMenuBar();
         window.setJMenuBar(menuBar);
-        
         menuFile=new JMenu("File");
         menuBar.add(menuFile);
         menuEdit=new JMenu("Edit");
@@ -190,11 +192,16 @@ public class GUI implements ActionListener,KeyListener{
     }
     
     void createPanel() {
-       textField=new JTextField(12);
-       button=new JButton("Enter");
+       textField=new JTextField(15);
+       button=new JButton("Search");
        //textField.setSize( new Dimension( 50, 10 ) );
        //textField.setColumns(10);
-       textField.setMaximumSize( textField.getPreferredSize() );
+       //textField.setMaximumSize( textField.getPreferredSize() );
+       Dimension d = textField.getPreferredSize();
+       textField.setMaximumSize(new Dimension(120, d.height -7));
+       Dimension db = button.getPreferredSize();
+       button.setMaximumSize(new Dimension(20,db.height-8));
+       textField.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 9));
        menuBar.add(Box.createHorizontalGlue());
        menuBar.add(textField);
        menuBar.add(button);
@@ -362,10 +369,10 @@ public class GUI implements ActionListener,KeyListener{
 			textArea.copy();
 			System.out.println("Ctrl+c");
 		}
-		if(((int)ev.getKeyChar())==22) {
+		/*if(((int)ev.getKeyChar())==22) {
 			textArea.paste();
 			System.out.println("Ctrl+v");
-		}
+		}*/
 		if(((int)ev.getKeyChar())==24) {
 			textArea.cut();
 			System.out.println("Ctrl+x");

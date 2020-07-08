@@ -4,6 +4,7 @@ import java.awt.FileDialog;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.Writer;
 
 import javax.swing.JOptionPane;
 
