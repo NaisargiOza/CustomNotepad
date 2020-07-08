@@ -158,7 +158,7 @@ public class GUI implements ActionListener,KeyListener{
     	window.add(label,BorderLayout.SOUTH);
         textArea.addKeyListener(this);
     	window.setVisible(true);
-    	myHighlighterPainter=new MyHighlighterPainter(Color.red);
+    	myHighlighterPainter=new MyHighlighterPainter(Color.yellow);
     }
     
     public void highlight(String pattern) {
@@ -200,8 +200,8 @@ public class GUI implements ActionListener,KeyListener{
        Dimension d = textField.getPreferredSize();
        textField.setMaximumSize(new Dimension(120, d.height -7));
        Dimension db = button.getPreferredSize();
-       button.setMaximumSize(new Dimension(20,db.height-8));
-       textField.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 9));
+       button.setMaximumSize(new Dimension(18,db.height-10));
+       textField.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
        menuBar.add(Box.createHorizontalGlue());
        menuBar.add(textField);
        menuBar.add(button);
